@@ -1,0 +1,21 @@
+{
+  "short_name": "ChessApp",
+  "name": "ChessBase Web V3",
+  "icons": [
+    {
+      "src": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/265f.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/265f.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#161512",
+  "theme_color": "#161512",
+  "display": "standalone",
+  "orientation": "portrait"
+}

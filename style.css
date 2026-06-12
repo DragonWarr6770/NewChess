@@ -1,0 +1,161 @@
+/* Core Styling Variables */
+:root {
+    --bg-main: #161512;
+    --bg-card: #262421;
+    --text-bright: #bababa;
+    --accent-green: #258125;
+    --border-color: #3d3b38;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-main);
+    color: #ffffff;
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+}
+
+/* Master Layout Framework */
+.app-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Game Board Column */
+.game-container {
+    flex: 1 1 auto;
+    background: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#board-frame {
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 1 / 1;
+}
+
+/* Sidebar Dashboard Configuration */
+.dashboard-sidebar {
+    width: 360px;
+    background: var(--bg-card);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.panel-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #7c7c7c;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.status-panel, .history-panel {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.metric-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#engine-eval {
+    color: var(--accent-green);
+}
+
+.history-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.scrollable-log {
+    flex-grow: 1;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-bright);
+}
+
+/* Control Navigation */
+.action-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.ctrl-btn {
+    background: #363532;
+    color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 12px 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.15s ease;
+}
+
+.ctrl-btn:active {
+    background: #454441;
+}
+
+/* ========================================================
+   MOBILE APP RESPONSIVE LAYER
+   ======================================================== */
+@media (max-width: 900px) {
+    .app-wrapper {
+        flex-direction: column;
+    }
+
+    .game-container {
+        flex: 0 0 auto;
+        padding: 10px;
+        height: 48dvh; /* Constrains board to top half of smartphone screen */
+    }
+
+    #board-frame {
+        max-width: 42dvh; /* Syncs square dimensions perfectly */
+    }
+
+    .dashboard-sidebar {
+        width: 100%;
+        flex: 1 1 auto;
+        height: 52dvh;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .history-panel {
+        min-height: 80px;
+    }
+
+    .ctrl-btn {
+        padding: 16px 4px; /* Increases tap space for touchscreen accuracy */
+    }
+    
+    .action-controls {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}

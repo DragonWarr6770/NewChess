@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Grandmaster AI Chess</title>
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <main class="game-container">
+        <div id="board-frame">
+            <div id="my-board"></div>
+        </div>
+    </main>
+
+    <aside class="dashboard-sidebar">
+        <div class="status-panel">
+            <div class="panel-tag">Live Engine Evaluation</div>
+            <div class="metric-display">
+                <span id="game-status">Your Turn</span>
+                <span id="engine-eval">Analysis: +0.00</span>
+            </div>
+        </div>
+
+        <div class="history-panel">
+            <div class="panel-tag">Move Log (PGN)</div>
+            <div id="pgn-log" class="scrollable-log"></div>
+        </div>
+
+        <nav class="action-controls">
+            <button class="ctrl-btn" id="btn-undo">Undo</button>
+            <button class="ctrl-btn" id="btn-flip">Flip Board</button>
+            <button class="ctrl-btn" id="btn-restart">New Match</button>
+        </nav>
+    </aside>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
