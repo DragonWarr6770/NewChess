@@ -1,63 +1,52 @@
 let board = null;
 const game = new Chess();
-const $status = $('#game-status');
-const $eval = $('#engine-eval');
-const $pgn = $('#pgn-log');
+const aiEngine = new jsChessEngine.Game(); // Native embedded AI
 
-// Background Web Worker to manage AI logic cleanly without hanging UI
-const stockfish = new Worker('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');
+const $status = $('#game-status');
+const $pgn = $('#pgn-log');
 
 function makeAIMove() {
     if (game.game_over()) return;
 
-    // Send state array to engine
-    stockfish.postMessage(`position fen ${game.fen()}`);
-    // Configure thinking depth limit (higher depth = smarter but slower execution)
-    stockfish.postMessage('go depth 12'); 
+    // The AI reads the current position and calculates the best response instantly
+    const aiMove = jsChessEngine.aiMove(game.fen(), 2); // Level 2 difficulty
+    
+    const fromSquare = Object.keys(aiMove)[0].toLowerCase();
+    const toSquare = aiMove[Object.keys(aiMove)[0]].toLowerCase();
+
+    // Apply the move to chess.js rules validation
+    game.move({
+        from: fromSquare,
+        to: toSquare,
+        promotion: 'q'
+    });
+
+    // Sync up the visual board animation
+    board.position(game.fen());
+    updateDashboardState();
 }
 
-stockfish.onmessage = function(event) {
-    const line = event.data;
-    if (line.startsWith('bestmove')) {
-        const moveRaw = line.split(' ')[1];
-        
-        // Execute calculated move paths
-        game.move({
-            from: moveRaw.substring(0, 2),
-            to: moveRaw.substring(2, 4),
-            promotion: moveRaw.length > 4 ? moveRaw.substring(4, 5) : undefined
-        });
-
-        board.position(game.fen());
-        updateDashboardState();
-    }
-};
-
 function onDragStart(source, piece, position, orientation) {
-    // Prevent moving items if game is concluded
     if (game.game_over()) return false;
 
-    // Direct movement tracking exclusively for player color constraints
-    if ((orientation === 'white' && piece.search(/^w/) === -1) ||
-        (orientation === 'black' && piece.search(/^b/) === -1)) {
-        return false;
-    }
+    // Player can only drag White pieces
+    if (piece.search(/^b/) !== -1) return false;
 }
 
 function onDrop(source, target) {
-    // Attempt validating parameters via strict movement engine rules
+    // Check if the user's move is legal
     const move = game.move({
         from: source,
         to: target,
-        promotion: 'q' // Promotes to Queen automatically for simplified mobile workflow
+        promotion: 'q'
     });
 
-    // Reset snapback positioning if marked illegal
     if (move === null) return 'snapback';
 
     updateDashboardState();
-    // Dispatch thread command trigger execution for engine response
-    window.setTimeout(makeAIMove, 250);
+    
+    // Trigger the AI move after a brief delay
+    window.setTimeout(makeAIMove, 300);
 }
 
 function onSnapEnd() {
@@ -76,11 +65,13 @@ function updateDashboardState() {
     }
 
     $status.text(statusText);
-    $pgn.html(game.pgn({ max_width: 5, newline_char: '<br>' }));
+    
+    // Format PGN history log
+    let pgnHtml = game.pgn({ max_width: 5, newline_char: '<br>' });
+    $pgn.html(pgnHtml || 'No moves made yet.');
     $pgn.scrollTop($pgn[0].scrollHeight);
 }
 
-// System Hardware Setup Variables
 const config = {
     draggable: true,
     position: 'start',
@@ -93,10 +84,10 @@ const config = {
 board = Chessboard('my-board', config);
 updateDashboardState();
 
-// Control Node Element Listeners
+// Control Panel Action Wireframing
 $('#btn-undo').on('click', () => {
-    game.undo(); // Remove AI move
-    game.undo(); // Remove Player move
+    game.undo(); // Undo AI move
+    game.undo(); // Undo Player move
     board.position(game.fen());
     updateDashboardState();
 });
@@ -111,5 +102,4 @@ $('#btn-restart').on('click', () => {
     updateDashboardState();
 });
 
-// Force canvas component redraw calculations on browser screen window snaps
 $(window).resize(board.resize);
