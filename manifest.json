@@ -13,7 +13,7 @@
   "backgroundColor": "#000000",
   "enableNotifications": true,
   "startUrl": "/",
-  "iconUrl": "file:///C:/Users/Olorin/icon.png",
+  "iconUrl": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/265f.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "C:\\Users\\Olorin\\android.keystore",
