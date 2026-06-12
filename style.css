@@ -1,0 +1,195 @@
+/* ========================================================
+   1. CORE APP VARIABLES & BASE RESETS
+   ======================================================== */
+:root { 
+    --sidebar-bg: #d4d4d4; 
+    --header-bg: #4a4a4a; 
+    --border: #888; 
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #9ea7b0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    box-sizing: border-box;
+    overflow: hidden; /* Stops double scrolling inside app containers */
+}
+
+/* ========================================================
+   2. DESKTOP LAYOUT (Default Window View)
+   ======================================================== */
+.container { 
+    display: flex; 
+    background: white; 
+    border: 1px solid #444; 
+    box-shadow: 10px 10px 30px rgba(0,0,0,0.5); 
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+/* Board Area Frame */
+#board-area { 
+    padding: 10px; 
+    background: #f0f0f0; 
+    border-right: 2px solid var(--border); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+#board { 
+    width: 500px; 
+    max-width: 100%; 
+}
+
+/* Sidebar Framework */
+.sidebar { 
+    width: 320px; 
+    background: var(--sidebar-bg); 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.panel-header { 
+    background: var(--header-bg); 
+    color: white; 
+    padding: 4px 10px; 
+    font-size: 11px; 
+    font-weight: bold; 
+    border-bottom: 1px solid #000; 
+}
+
+/* Move Log Component */
+#notation { 
+    flex-grow: 1; 
+    background: white; 
+    margin: 5px; 
+    border: 1px solid var(--border); 
+    overflow-y: scroll; 
+    height: 350px; 
+}
+
+.move-row { 
+    display: grid; 
+    grid-template-columns: 35px 1fr 1fr; 
+    border-bottom: 1px solid #eee; 
+    font-size: 13px; 
+}
+
+.move-num { 
+    background: #e8e8e8; 
+    padding: 3px; 
+    text-align: center; 
+    color: #555; 
+    border-right: 1px solid #ddd; 
+}
+
+.move-piece { 
+    padding: 3px 10px; 
+    cursor: pointer; 
+    font-weight: 500; 
+}
+
+.move-piece:hover { 
+    background: #cce0ff; 
+}
+
+/* Analysis Output Component */
+.analysis-box { 
+    padding: 10px; 
+    background: #fff; 
+    margin: 5px; 
+    border: 1px solid var(--border); 
+    font-size: 12px; 
+    height: 60px; 
+    box-sizing: border-box; 
+}
+
+#engine-status { 
+    font-family: monospace; 
+    color: #008000; 
+    font-weight: bold; 
+}
+
+/* Control Utilities */
+.btn-group { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1px; 
+    padding: 5px; 
+    background: #999; 
+}
+
+button { 
+    border: 1px solid #666; 
+    background: #eee; 
+    padding: 6px 2px; 
+    font-size: 10px; 
+    cursor: pointer; 
+    text-transform: uppercase; 
+    font-weight: bold;
+}
+
+button:hover { 
+    background: #fff; 
+}
+
+/* ========================================================
+   3. MOBILE APP CONTAINER OVERWRITES (Max Width: 850px)
+   ======================================================== */
+@media (max-width: 850px) {
+    html, body {
+        align-items: stretch;
+    }
+
+    .container {
+        flex-direction: column; /* Switches from horizontal to top-to-bottom layout */
+        border: none;
+        box-shadow: none;
+        width: 100vw;
+        height: 100dvh; /* Adjusts to true mobile viewport heights minus toolbars */
+    }
+
+    #board-area {
+        border-right: none;
+        border-bottom: 2px solid var(--border);
+        padding: 5px;
+        flex: 0 0 auto; /* Keeps the board sizing steady */
+    }
+
+    #board {
+        width: 92vw; /* Scales cleanly to phone edges while staying perfectly square */
+        max-width: 380px; 
+    }
+
+    .sidebar {
+        width: 100%;
+        flex: 1 1 auto; /* Pushes layout elements down into remaining screen space */
+        overflow: hidden;
+    }
+
+    #notation {
+        height: auto; /* Drops fixed height properties */
+        flex-grow: 1;
+    }
+
+    .analysis-box {
+        height: 50px;
+    }
+
+    button {
+        padding: 12px 2px; /* Amplifies tap surface area for fingers */
+        font-size: 11px;
+    }
+
+    .btn-group {
+        /* Prevents layout crashing into system home indicators/pill bars */
+        padding-bottom: env(safe-area-inset-bottom); 
+    }
+}
