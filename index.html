@@ -1,47 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Grandmaster AI Chess</title>
-    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Multiplayer Chess</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <h1>Online Multiplayer Chess</h1>
+    <div id="status">Connecting...</div>
+    <div id="chessboard"></div>
+    <button id="newGame">New Game</button>
 
-<div class="app-wrapper">
-    <main class="game-container">
-        <div id="board-frame">
-            <div id="my-board"></div>
-        </div>
-    </main>
+    <script>
+        const socket = new WebSocket('wss://yourserver.com'); // replace with your WebSocket server URL
 
-    <aside class="dashboard-sidebar">
-        <div class="status-panel">
-            <div class="panel-tag">Live Engine Evaluation</div>
-            <div class="metric-display">
-                <span id="game-status">Your Turn</span>
-            </div>
-        </div>
+        const statusDiv = document.getElementById('status');
+        const chessboardDiv = document.getElementById('chessboard');
+        const newGameBtn = document.getElementById('newGame');
 
-        <div class="history-panel">
-            <div class="panel-tag">Move Log (PGN)</div>
-            <div id="pgn-log" class="scrollable-log">No moves made yet.</div>
-        </div>
+        // Initialize your chess game here (using chess.js or similar library)
+        let game = new Chess();
 
-        <nav class="action-controls">
-            <button class="ctrl-btn" id="btn-undo">Undo</button>
-            <button class="ctrl-btn" id="btn-flip">Flip Board</button>
-            <button class="ctrl-btn" id="btn-restart">New Match</button>
-        </nav>
-    </aside>
-</div>
+        // Handle WebSocket events
+        socket.onopen = () => {
+            statusDiv.innerText = 'Connected';
+            // Join a game or create one
+            socket.send(JSON.stringify({ type: 'join', room: 'default' }));
+        };
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-chess-engine@1.0.2/lib/js-chess-engine.umd.js"></script>
-<script src="script.js"></script>
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'move') {
+                // Apply move received from opponent
+                game.move(data.move);
+                updateBoard();
+            } else if (data.type === 'yourTurn') {
+                statusDiv.innerText = 'Your turn';
+            } else if (data.type === 'gameStart') {
+                statusDiv.innerText = 'Game started!';
+            }
+        };
+
+        socket.onclose = () => {
+            statusDiv.innerText = 'Disconnected';
+        };
+
+        // Function to update the chessboard display
+        function updateBoard() {
+            // Render your chessboard here, e.g., using chessboard.js
+            // For simplicity, this is a placeholder
+            chessboardDiv.innerHTML = `<pre>${game.pgn()}</pre>`;
+        }
+
+        // Handle user moves (this is a simplified example)
+        // You need to integrate with a chess UI library
+        function handleUserMove(move) {
+            if (game.move(move)) {
+                updateBoard();
+                socket.send(JSON.stringify({ type: 'move', move: move }));
+                // Notify opponent it's their turn
+                socket.send(JSON.stringify({ type: 'yourTurn' }));
+            }
+        }
+
+        // New game button
+        newGameBtn.onclick = () => {
+            game.reset();
+            updateBoard();
+            socket.send(JSON.stringify({ type: 'newGame' }));
+        };
+
+        // Placeholder for user move event
+        // You should replace this with actual move handling from your UI
+        document.addEventListener('keydown', (e) => {
+            // Example: handle moves via keyboard or UI
+        });
+    </script>
 </body>
 </html>
