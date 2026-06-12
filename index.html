@@ -6,7 +6,6 @@
     <title>Grandmaster AI Chess</title>
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
@@ -22,13 +21,12 @@
             <div class="panel-tag">Live Engine Evaluation</div>
             <div class="metric-display">
                 <span id="game-status">Your Turn</span>
-                <span id="engine-eval">Analysis: +0.00</span>
             </div>
         </div>
 
         <div class="history-panel">
             <div class="panel-tag">Move Log (PGN)</div>
-            <div id="pgn-log" class="scrollable-log"></div>
+            <div id="pgn-log" class="scrollable-log">No moves made yet.</div>
         </div>
 
         <nav class="action-controls">
@@ -42,6 +40,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-chess-engine@1.0.2/lib/js-chess-engine.umd.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
