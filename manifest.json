@@ -1,21 +1,21 @@
 {
-  "short_name": "ChessApp",
-  "name": "ChessBase Web V3",
+  "name": "Online Multiplayer Chess",
+  "short_name": "ChessOnline",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "A simple online multiplayer chess game.",
   "icons": [
     {
-      "src": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/265f.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/265f.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ],
-  "start_url": "/",
-  "background_color": "#161512",
-  "theme_color": "#161512",
-  "display": "standalone",
-  "orientation": "portrait"
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "version": "1.0.0"
 }
