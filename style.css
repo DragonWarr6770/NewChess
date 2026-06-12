@@ -1,4 +1,3 @@
-/* Core Styling Variables */
 :root {
     --bg-main: #161512;
     --bg-card: #262421;
@@ -18,7 +17,6 @@ html, body {
     overflow: hidden;
 }
 
-/* Master Layout Framework */
 .app-wrapper {
     display: flex;
     width: 100vw;
@@ -26,7 +24,6 @@ html, body {
     box-sizing: border-box;
 }
 
-/* Game Board Column */
 .game-container {
     flex: 1 1 auto;
     background: #1e1e1e;
@@ -42,7 +39,6 @@ html, body {
     aspect-ratio: 1 / 1;
 }
 
-/* Sidebar Dashboard Configuration */
 .dashboard-sidebar {
     width: 360px;
     background: var(--bg-card);
@@ -77,10 +73,6 @@ html, body {
     font-weight: 600;
 }
 
-#engine-eval {
-    color: var(--accent-green);
-}
-
 .history-panel {
     flex-grow: 1;
     display: flex;
@@ -97,7 +89,6 @@ html, body {
     color: var(--text-bright);
 }
 
-/* Control Navigation */
 .action-controls {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -121,9 +112,6 @@ html, body {
     background: #454441;
 }
 
-/* ========================================================
-   MOBILE APP RESPONSIVE LAYER
-   ======================================================== */
 @media (max-width: 900px) {
     .app-wrapper {
         flex-direction: column;
@@ -132,11 +120,11 @@ html, body {
     .game-container {
         flex: 0 0 auto;
         padding: 10px;
-        height: 48dvh; /* Constrains board to top half of smartphone screen */
+        height: 48dvh;
     }
 
     #board-frame {
-        max-width: 42dvh; /* Syncs square dimensions perfectly */
+        max-width: 42dvh;
     }
 
     .dashboard-sidebar {
@@ -152,7 +140,7 @@ html, body {
     }
 
     .ctrl-btn {
-        padding: 16px 4px; /* Increases tap space for touchscreen accuracy */
+        padding: 16px 4px;
     }
     
     .action-controls {
