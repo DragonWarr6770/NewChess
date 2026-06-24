@@ -1,0 +1,21 @@
+{
+  "short_name": "CarlsenChess",
+  "name": "Magnus Carlsen Themed Chess",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#0f172a",
+  "theme_color": "#1a2634",
+  "display": "standalone",
+  "orientation": "portrait"
+}

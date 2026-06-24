@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carlsen Chess</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a2634">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            font-style: italic;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        #my-board {
+            width: 400px;
+            max-width: 90vw;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        /* Custom Magnus-themed board colors overriding default styles */
+        .white-1e1d7 { background-color: #e2e8f0 !important; color: #1a2634 !important; }
+        .black-3c85d { background-color: #1e293b !important; color: #e2e8f0 !important; }
+        
+        .controls {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <h1>CARLSEN CHESS</h1>
+    <div class="subtitle">"Some people think that if their opponent plays a beautiful game, it’s OK to lose. I don’t."</div>
+
+    <div id="my-board"></div>
+
+    <div class="controls">
+        <button id="startBtn">Reset Match</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+
+    <script>
+        // Basic chess integration
+        var board = null;
+        var game = new Chess();
+
+        function onDragStart (source, piece, position, orientation) {
+            // Do not pick up pieces if the game is over
+            if (game.game_over()) return false;
+
+            // Only pick up pieces for White (Player) - simulated Magnus mode
+            if (piece.search(/^b/) !== -1) return false;
+        }
+
+        function makeRandomMove () {
+            var possibleMoves = game.moves();
+
+            // Game over
+            if (possibleMoves.length === 0) return;
+
+            var randomIdx = Math.floor(Math.random() * possibleMoves.length);
+            game.move(possibleMoves[randomIdx]);
+            board.position(game.fen());
+        }
+
+        function onDrop (source, target) {
+            // See if the move is legal
+            var move = game.move({
+                from: source,
+                to: target,
+                promotion: 'q' // Always promote to a queen for simplicity
+            });
+
+            // Illegal move
+            if (move === null) return 'snapback';
+
+            // Make random move for black after a short delay
+            window.setTimeout(makeRandomMove, 250);
+        }
+
+        function onSnapEnd () {
+            board.position(game.fen());
+        }
+
+        var config = {
+            draggable: true,
+            position: 'start',
+            onDragStart: onDragStart,
+            onDrop: onDrop,
+            onSnapEnd: onSnapEnd
+        };
+        
+        board = Chessboard('my-board', config);
+
+        $('#startBtn').on('click', function() {
+            game.reset();
+            board.start();
+        });
+    </script>
+</body>
+</html>
