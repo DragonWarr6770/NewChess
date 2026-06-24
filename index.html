@@ -2,110 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Carlsen Chess Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CARLSEN CHESS</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    
     <style>
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background-color: #0f172a;
-            color: #e2e8f0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px 10px;
-            overflow: hidden; /* Prevents accidental bounce scrolling on mobile */
+            user-select: none;
         }
         
-        .header {
-            text-align: center;
+        html, body {
             width: 100%;
-            margin-bottom: auto;
-        }
-        h1 {
-            color: #38bdf8;
-            font-size: 1.8rem;
-            margin: 5px 0;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        .subtitle {
-            font-style: italic;
-            color: #94a3b8;
-            font-size: 0.85rem;
-            padding: 0 15px;
-            line-height: 1.3;
-        }
-
-        /* Responsive Mobile Board Container */
-        .board-container {
-            width: 100%;
-            max-width: 360px; /* Perfect for most phone screens */
-            margin: auto 0;
-            display: flex;
-            justify-content: center;
-        }
-        #my-board {
-            width: 100%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
         }
-        
-        /* Custom Magnus Color Theme overrides */
-        .white-1e1d7 { background-color: #f1f5f9 !important; }
-        .black-3c85d { background-color: #334155 !important; }
-        
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin: 0 0 4px 0;
+            color: #f8fafc;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        /* Chessboard custom layout and styling */
+        .board-wrapper {
+            width: 100%;
+            max-width: 380px;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* Crucial: Disables mobile gestures on board dragging */
+        }
+
+        #board {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid #1e293b;
+        }
+
+        /* Custom Nordic Theme Overrides for Chessboard.js */
+        .white-1e1d7 { background-color: #e2e8f0 !important; color: #1e293b !important; }
+        .black-3c85d { background-color: #1e293b !important; color: #e2e8f0 !important; }
+        .highlight-mm { box-shadow: inset 0 0 3px 3px #38bdf8 !important; }
+
+        /* Dynamic Quotes Container */
+        .quote-container {
+            width: 100%;
+            max-width: 380px;
+            min-height: 54px;
+            text-align: center;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #quote {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #94a3b8;
+            line-height: 1.4;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Bottom Controls */
         .controls {
             width: 100%;
-            max-width: 360px;
-            margin-top: auto;
-            padding-bottom: 10px;
+            max-width: 380px;
+            margin-bottom: 20px;
         }
-        button {
-            background-color: #0284c7;
-            color: white;
-            border: none;
+
+        .btn {
             width: 100%;
-            padding: 16px; /* Large touch target for thumbs */
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
+            height: 52px; /* Optimal touch target */
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #f8fafc;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            transition: background 0.2s, transform 0.1s;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
-        button:active {
-            background-color: #0369a1;
-            transform: scale(0.98); /* Tactile feedback on tap */
+
+        .btn:active {
+            background: #0f172a;
+            border-color: #38bdf8;
+            color: #38bdf8;
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Carlsen Chess</h1>
-        <div class="subtitle">"Some people think that if their opponent plays a beautiful game, it’s OK to lose. I don’t."</div>
+    <header>
+        <h1>CARLSEN CHESS</h1>
+        <div class="subtitle">The Iceman Engine</div>
+    </header>
+
+    <div class="board-wrapper">
+        <div id="board"></div>
     </div>
 
-    <div class="board-container">
-        <div id="my-board"></div>
+    <div class="quote-container">
+        <div id="quote">"Some people think that if their opponent plays a beautiful game, it’s OK to lose. I don’t."</div>
     </div>
 
     <div class="controls">
-        <button id="startBtn">New Match</button>
+        <button class="btn" id="reset-btn">NEW MATCH</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -113,56 +160,199 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 
     <script>
-        var board = null;
-        var game = new Chess();
+        // Magnus Quotes Pool
+        const quotes = [
+            "\"Some people think that if their opponent plays a beautiful game, it’s OK to lose. I don’t.\"",
+            "\"Not winning is not an option for me.\"",
+            "\"I can see 15 to 20 moves ahead. Anything less is just preparation.\"",
+            "\"Self-confidence is very important. If you don't think you can win, you will make cowardly decisions.\"",
+            "\"I try to bully my opponents.\""
+        ];
 
-        function onDragStart (source, piece, position, orientation) {
-            if (game.game_over()) return false;
-            // Player plays as White (Magnus mode)
-            if (piece.search(/^b/) !== -1) return false;
+        function rotateQuote() {
+            const quoteEl = document.getElementById('quote');
+            quoteEl.style.opacity = 0;
+            setTimeout(() => {
+                const randIndex = Math.floor(Math.random() * quotes.length);
+                quoteEl.innerText = quotes[randIndex];
+                quoteEl.style.opacity = 1;
+            }, 400);
         }
 
-        function makeRandomMove () {
-            var possibleMoves = game.moves();
-            if (possibleMoves.length === 0) return;
+        // --- CHESS ENGINE (MINIMAX AI WITH PIECE-SQUARE TABLES) ---
+        const weights = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+        
+        // Positional matrices favoring center control and forward development
+        const pst = {
+            p: [
+                [0,  0,  0,  0,  0,  0,  0,  0], [50, 50, 50, 50, 50, 50, 50, 50],
+                [10, 10, 20, 30, 30, 20, 10, 10], [5,  5, 10, 25, 25, 10,  5,  5],
+                [0,  0,  0, 20, 20,  0,  0,  0], [5, -5,-10,  0,  0,-10, -5,  5],
+                [5, 10, 10,-20,-20, 10, 10,  5], [0,  0,  0,  0,  0,  0,  0,  0]
+            ],
+            n: [
+                [-50,-40,-30,-30,-30,-30,-40,-50], [-40,-20,  0,  0,  0,  0,-20,-40],
+                [-30,  0, 10, 15, 15, 10,  0,-30], [-30,  5, 15, 20, 20, 15,  5,-30],
+                [-30,  0, 15, 20, 20, 15,  0,-30], [-30,  5, 10, 15, 15, 10,  5,-30],
+                [-40,-20,  0,  5,  5,  0,-20,-40], [-50,-40,-30,-30,-30,-30,-40,-50]
+            ],
+            b: [
+                [-20,-10,-10,-10,-10,-10,-10,-20], [-10,  0,  0,  0,  0,  0,  0,-10],
+                [-10,  0,  5, 10, 10,  5,  0,-10], [-10,  5,  5, 10, 10,  5,  5,-10],
+                [-10,  0, 10, 10, 10, 10,  0,-10], [-10, 10, 10, 10, 10, 10, 10,-10],
+                [-10,  5,  0,  0,  0,  0,  5,-10], [-20,-10,-10,-10,-10,-10,-10,-20]
+            ],
+            r: [
+                [0,  0,  0,  0,  0,  0,  0,  0], [5, 10, 10, 10, 10, 10, 10,  5],
+                [-5,  0,  0,  0,  0,  0,  0, -5], [-5,  0,  0,  0,  0,  0,  0, -5],
+                [-5,  0,  0,  0,  0,  0,  0, -5], [-5,  0,  0,  0,  0,  0,  0, -5],
+                [-5,  0,  0,  0,  0,  0,  0, -5], [0,  0,  0,  5,  5,  0,  0,  0]
+            ],
+            q: [
+                [-20,-10,-10, -5, -5,-10,-10,-20], [-10,  0,  0,  0,  0,  0,  0,-10],
+                [-10,  0,  5,  5,  5,  5,  0,-10], [-5,  0,  5,  5,  5,  5,  0, -5],
+                [0,  0,  5,  5,  5,  5,  0, -5], [-10,  5,  5,  5,  5,  5,  0,-10],
+                [-10,  0,  5,  0,  0,  0,  0,-10], [-20,-10,-10, -5, -5,-10,-10,-20]
+            ],
+            k: [
+                [-30,-40,-40,-50,-50,-40,-40,-30], [-30,-40,-40,-50,-50,-40,-40,-30],
+                [-30,-40,-40,-50,-50,-40,-40,-30], [-30,-40,-40,-50,-50,-40,-40,-30],
+                [-20,-30,-30,-40,-40,-30,-30,-20], [-10,-20,-20,-20,-20,-20,-20,-10],
+                [20, 20,  0,  0,  0,  0, 20, 20], [20, 30, 10,  0,  0, 10, 30, 20]
+            ]
+        };
 
-            var randomIdx = Math.floor(Math.random() * possibleMoves.length);
-            game.move(possibleMoves[randomIdx]);
+        function evaluateBoard(boardState) {
+            let totalEvaluation = 0;
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    const piece = boardState[i][j];
+                    if (piece) {
+                        let value = weights[piece.type];
+                        // Black maps normally to matrix layout, white flips row indexing
+                        let tableVal = piece.color === 'b' ? pst[piece.type][i][j] : pst[piece.type][7 - i][j];
+                        value += tableVal;
+                        totalEvaluation += piece.color === 'w' ? -value : value;
+                    }
+                }
+            }
+            return totalEvaluation;
+        }
+
+        function minimax(gameInstance, depth, alpha, beta, isMaximizingPlayer) {
+            if (depth === 0 || gameInstance.game_over()) {
+                return evaluateBoard(gameInstance.board());
+            }
+
+            const moves = gameInstance.moves();
+            if (isMaximizingPlayer) {
+                let bestMoveValue = -Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    gameInstance.move(moves[i]);
+                    bestMoveValue = Math.max(bestMoveValue, minimax(gameInstance, depth - 1, alpha, beta, false));
+                    gameInstance.undo();
+                    alpha = Math.max(alpha, bestMoveValue);
+                    if (beta <= alpha) break;
+                }
+                return bestMoveValue;
+            } else {
+                let bestMoveValue = Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    gameInstance.move(moves[i]);
+                    bestMoveValue = Math.min(bestMoveValue, minimax(gameInstance, depth - 1, alpha, beta, true));
+                    gameInstance.undo();
+                    beta = Math.min(beta, bestMoveValue);
+                    if (beta <= alpha) break;
+                }
+                return bestMoveValue;
+            }
+        }
+
+        function getBestMove(gameInstance) {
+            const moves = gameInstance.moves();
+            let bestMoveValue = -Infinity;
+            let bestMove = null;
+            
+            // Random baseline tie-breaker fallback
+            moves.sort(() => 0.5 - Math.random()); 
+
+            for (let i = 0; i < moves.length; i++) {
+                gameInstance.move(moves[i]);
+                // Depth 2 provides instant calculations on low-end phones while playing systematically
+                let value = minimax(gameInstance, 2, -Infinity, Infinity, false);
+                gameInstance.undo();
+                if (value > bestMoveValue) {
+                    bestMoveValue = value;
+                    bestMove = moves[i];
+                }
+            }
+            return bestMove;
+        }
+
+        // --- GAME WORKFLOW INITIALIZATION ---
+        let board = null;
+        const game = new Chess();
+
+        function onDragStart(source, piece, position, orientation) {
+            if (game.game_over() || piece.search(/^b/) !== -1) return false;
+        }
+
+        function makeEngineMove() {
+            const engineMove = getBestMove(game);
+            if (!engineMove) return;
+            
+            game.move(engineMove);
             board.position(game.fen());
+            
+            if (game.game_over()) alert("Checkmate. Magnus wins.");
         }
 
-        function onDrop (source, target) {
-            var move = game.move({
+        function onDrop(source, target) {
+            const move = game.move({
                 from: source,
                 to: target,
-                promotion: 'q' 
+                promotion: 'q'
             });
 
             if (move === null) return 'snapback';
-            window.setTimeout(makeRandomMove, 250);
+            
+            if (game.game_over()) {
+                alert("Flawless victory. You beat the engine.");
+                return;
+            }
+
+            rotateQuote();
+            window.setTimeout(makeEngineMove, 300);
         }
 
-        function onSnapEnd () {
+        function onSnapEnd() {
             board.position(game.fen());
         }
 
-        var config = {
+        const config = {
             draggable: true,
             position: 'start',
             onDragStart: onDragStart,
             onDrop: onDrop,
-            onSnapEnd: onSnapEnd
+            onSnapEnd: onSnapEnd,
+            pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
         };
-        
-        board = Chessboard('my-board', config);
 
-        // Fix for mobile window resizing/rotation
+        board = Chessboard('board', config);
         $(window).resize(board.resize);
 
-        $('#startBtn').on('click', function() {
+        $('#reset-btn').on('click', () => {
             game.reset();
             board.start();
+            rotateQuote();
         });
+
+        // --- PWA SERVICE WORKER REGISTRATION ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            });
+        }
     </script>
 </body>
 </html>
