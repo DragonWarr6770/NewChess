@@ -1,18 +1,22 @@
 {
-  "name": "Carlsen Chess: The Silhouette",
-  "short_name": "Carlsen Chess",
-  "description": "A Magnus Carlsen inspired minimalist chess game.",
-  "start_url": "./index.html",
+  "name": "Carlsen Chess",
+  "short_name": "CarlsenChess",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3233/3233497.png",
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ]
+  ],
+  "lang": "en"
 }
